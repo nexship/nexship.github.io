@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>Print Label</title>
@@ -16,6 +17,8 @@
         const urlParams = new URLSearchParams(queryString);
         const company = urlParams.get("co");
         const ticket = urlParams.get("srid");
+        console.log(company);
+        console.log(ticket);
         document.getElementById("labeltext").innerHTML = "${company}<br />Ticket #${ticket}"
                 
         // prints the label
