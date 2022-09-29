@@ -3,8 +3,174 @@
 <title>Print Label</title>
 <script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js" type="text/javascript" charset="UTF-8"> </script>
 
+<script>
+
+(function()
+{
+    // called when the document completly loaded
+    function onload()
+    {
+        var printButton = document.getElementById('printButton');
+        
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const company = urlParams.get("co");
+        const ticket = urlParams.get("srid");
+        document.getElementById("labeltext").innerHTML = "${company}<br />Ticket #${ticket}"
+                
+        // prints the label
+        printButton.onclick = function()
+        {
+            try
+            {
+                // open label
+                var labelXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+    "                    <DieCutLabel Version=\"8.0\" Units=\"twips\" MediaType=\"Default\">" +
+    "                    <PaperOrientation>Landscape</PaperOrientation>" +
+    "                    <Id>LargeShipping</Id>" +
+    "                    <IsOutlined>false</IsOutlined>" +
+    "                    <PaperName>30256 Shipping</PaperName>" +
+    "                    <DrawCommands>" +
+    "                        <RoundRectangle X=\"0\" Y=\"0\" Width=\"3331\" Height=\"5715\" Rx=\"270\" Ry=\"270\" />" +
+    "                    </DrawCommands>" +
+    "                    <ObjectInfo>" +
+    "                        <TextObject>" +
+    "                            <Name>Name</Name>" +
+    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
+    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
+    "                            <LinkedObjectName />" +
+    "                            <Rotation>Rotation0</Rotation>" +
+    "                            <IsMirrored>False</IsMirrored>" +
+    "                            <IsVariable>False</IsVariable>" +
+    "                            <GroupID>-1</GroupID>" +
+    "                            <IsOutlined>False</IsOutlined>" +
+    "                            <HorizontalAlignment>Center</HorizontalAlignment>" +
+    "                            <VerticalAlignment>Middle</VerticalAlignment>" +
+    "                            <TextFitMode>ShrinkToFit</TextFitMode>" +
+    "                            <UseFullFontHeight>True</UseFullFontHeight>" +
+    "                            <Verticalized>False</Verticalized>" +
+    "                            <StyledText>" +
+    "                                <Element>" +
+    "                                    <String xml:space=\"preserve\">COMPANY_NAME</String>" +
+    "                                    <Attributes>" +
+    "                                        <Font Family=\"Arial\" Size=\"48\" Bold=\"True\" Italic=\"False\" Underline=\"False\" Strikeout=\"False\" />" +
+    "                                        <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" HueScale=\"100\" />" +
+    "                                    </Attributes>" +
+    "                                </Element>" +
+    "                            </StyledText>" +
+    "                        </TextObject>" +
+    "                        <Bounds X=\"336\" Y=\"150\" Width=\"5040\" Height=\"1095\" />" +
+    "                    </ObjectInfo>" +
+    "                    <ObjectInfo>" +
+    "                        <ShapeObject Stroke=\"SolidLine\">" +
+    "                            <Name>Shape</Name>" +
+    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
+    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
+    "                            <LinkedObjectName />" +
+    "                            <Rotation>Rotation0</Rotation>" +
+    "                            <IsMirrored>False</IsMirrored>" +
+    "                            <IsVariable>False</IsVariable>" +
+    "                            <GroupID>-1</GroupID>" +
+    "                            <IsOutlined>False</IsOutlined>" +
+    "                            <ShapeType>HorizontalLine</ShapeType>" +
+    "                            <LineWidth>15</LineWidth>" +
+    "                            <LineAlignment>Center</LineAlignment>" +
+    "                            <FillColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
+    "                        </ShapeObject>" +
+    "                        <Bounds X=\"336\" Y=\"1395\" Width=\"5055\" Height=\"15\" />" +
+    "                    </ObjectInfo>" +
+    "                    <ObjectInfo>" +
+    "                        <TextObject>" +
+    "                            <Name>Text_1</Name>" +
+    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
+    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
+    "                            <LinkedObjectName />" +
+    "                            <Rotation>Rotation0</Rotation>" +
+    "                            <IsMirrored>False</IsMirrored>" +
+    "                            <IsVariable>True</IsVariable>" +
+    "                            <GroupID>-1</GroupID>" +
+    "                            <IsOutlined>False</IsOutlined>" +
+    "                            <HorizontalAlignment>Center</HorizontalAlignment>" +
+    "                            <VerticalAlignment>Middle</VerticalAlignment>" +
+    "                            <TextFitMode>None</TextFitMode>" +
+    "                            <UseFullFontHeight>True</UseFullFontHeight>" +
+    "                            <Verticalized>False</Verticalized>" +
+    "                            <StyledText>" +
+    "                                <Element>" +
+    "                                    <String xml:space=\"preserve\">TICKET_NUMBER</String>" +
+    "                                    <Attributes>" +
+    "                                        <Font Family=\"Arial\" Size=\"26\" Bold=\"True\" Italic=\"False\" Underline=\"False\" Strikeout=\"False\" />" +
+    "                                        <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" HueScale=\"100\" />" +
+    "                                    </Attributes>" +
+    "                                </Element>" +
+    "                            </StyledText>" +
+    "                        </TextObject>" +
+    "                        <Bounds X=\"336\" Y=\"1725\" Width=\"5070\" Height=\"1320\" />" +
+    "                    </ObjectInfo>" +
+    "                </DieCutLabel>";
+                
+                labelXml.replace("COMPANY_NAME", company);
+                labelXml.replace("TICKET_NUMBER", ticket);
+                
+                var label = dymo.label.framework.openLabelXml(labelXml);
+                
+                // select printer to print on
+                // for simplicity sake just use the first LabelWriter printer
+                var printers = dymo.label.framework.getPrinters();
+                if (printers.length == 0)
+                    throw "No DYMO printers are installed. Install DYMO printers.";
+
+                var printerName = "";
+                for (var i = 0; i < printers.length; ++i)
+                {
+                    var printer = printers[i];
+                    if (printer.printerType == "LabelWriterPrinter")
+                    {
+                        printerName = printer.name;
+                        break;
+                    }
+                }
+                
+                if (printerName == "")
+                    throw "No LabelWriter printers found. Install LabelWriter printer";
+
+                // finally print the label
+                label.print(printerName);
+            }
+            catch(e)
+            {
+                alert(e.message || e);
+            }
+        }
+    };
+
+   function initTests()
+	{
+		if(dymo.label.framework.init)
+		{
+			//dymo.label.framework.trace = true;
+			dymo.label.framework.init(onload);
+		} else {
+			onload();
+		}
+	}
+
+	// register onload event
+	if (window.addEventListener)
+		window.addEventListener("load", initTests, false);
+	else if (window.attachEvent)
+		window.attachEvent("onload", initTests);
+	else
+		window.onload = initTests;
+
+} ());
+</script>
+
 </head>
 <body>
+
+<p id="labeltext"></p>
+<br /><br />
 Click below to print label.
 <div id="printDiv"><button id="printButton">Print</button></div>
 </body>
