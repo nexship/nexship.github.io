@@ -2,6 +2,30 @@
 <html>
 <head>
 <title>Print Label</title>
+<style>
+img {
+  max-width: 50%;
+  height: auto;
+}
+
+.button {
+  background-color: #0099ff;
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.2s;
+}
+
+.button:hover {
+  background-color: #66c2ff;
+  color: white;
+}
+
+</style>
 <script src="DYMO.Label.Framework.js" type="text/javascript" charset="UTF-8"> </script>
 
 <script>
@@ -17,104 +41,245 @@
         const urlParams = new URLSearchParams(queryString);
         const company = urlParams.get("co");
         const ticket = urlParams.get("srid");
-        console.log(company);
-        console.log(ticket);
-        document.getElementById("labeltext").innerHTML = `${company}<br />Ticket #${ticket}`;
+        //console.log(company);
+        //console.log(ticket);
+        
+        // open label
+        var labelXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+	"<DesktopLabel Version=\"1\">" +
+	"  <DYMOLabel Version=\"3\">" +
+	"    <Description>DYMO Label</Description>" +
+	"    <Orientation>Landscape</Orientation>" +
+	"    <LabelName>LargeShipping</LabelName>" +
+	"    <InitialLength>0</InitialLength>" +
+	"    <BorderStyle>SolidLine</BorderStyle>" +
+	"    <DYMORect>" +
+	"      <DYMOPoint>" +
+	"        <X>0.2333333</X>" +
+	"        <Y>0.05666666</Y>" +
+	"      </DYMOPoint>" +
+	"      <Size>" +
+	"        <Width>3.706667</Width>" +
+	"        <Height>2.216667</Height>" +
+	"      </Size>" +
+	"    </DYMORect>" +
+	"    <BorderColor>" +
+	"      <SolidColorBrush>" +
+	"        <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"      </SolidColorBrush>" +
+	"    </BorderColor>" +
+	"    <BorderThickness>1</BorderThickness>" +
+	"    <Show_Border>False</Show_Border>" +
+	"    <DynamicLayoutManager>" +
+	"      <RotationBehavior>ClearObjects</RotationBehavior>" +
+	"      <LabelObjects>" +
+	"        <TextObject>" +
+	"          <Name>Return Address</Name>" +
+	"          <Brushes>" +
+	"            <BackgroundBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BackgroundBrush>" +
+	"            <BorderBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BorderBrush>" +
+	"            <StrokeBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </StrokeBrush>" +
+	"            <FillBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </FillBrush>" +
+	"          </Brushes>" +
+	"          <Rotation>Rotation0</Rotation>" +
+	"          <OutlineThickness>1</OutlineThickness>" +
+	"          <IsOutlined>False</IsOutlined>" +
+	"          <BorderStyle>SolidLine</BorderStyle>" +
+	"          <Margin>" +
+	"            <DYMOThickness Left=\"0\" Top=\"0\" Right=\"0\" Bottom=\"0\" />" +
+	"          </Margin>" +
+	"          <HorizontalAlignment>Center</HorizontalAlignment>" +
+	"          <VerticalAlignment>Middle</VerticalAlignment>" +
+	"          <FitMode>AlwaysFit</FitMode>" +
+	"          <IsVertical>False</IsVertical>" +
+	"          <FormattedText>" +
+	"            <FitMode>AlwaysFit</FitMode>" +
+	"            <HorizontalAlignment>Center</HorizontalAlignment>" +
+	"            <VerticalAlignment>Middle</VerticalAlignment>" +
+	"            <IsVertical>False</IsVertical>" +
+	"            <LineTextSpan>" +
+	"              <TextSpan>" +
+	"                <Text>COMPANY_NAME</Text>" +
+	"                <FontInfo>" +
+	"                  <FontName>Arial</FontName>" +
+	"                  <FontSize>28.4</FontSize>" +
+	"                  <IsBold>True</IsBold>" +
+	"                  <IsItalic>False</IsItalic>" +
+	"                  <IsUnderline>False</IsUnderline>" +
+	"                  <FontBrush>" +
+	"                    <SolidColorBrush>" +
+	"                      <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"                    </SolidColorBrush>" +
+	"                  </FontBrush>" +
+	"                </FontInfo>" +
+	"              </TextSpan>" +
+	"            </LineTextSpan>" +
+	"          </FormattedText>" +
+	"          <ObjectLayout>" +
+	"            <DYMOPoint>" +
+	"              <X>0.2401575</X>" +
+	"              <Y>0.1141732</Y>" +
+	"            </DYMOPoint>" +
+	"            <Size>" +
+	"              <Width>3.543307</Width>" +
+	"              <Height>0.6338583</Height>" +
+	"            </Size>" +
+	"          </ObjectLayout>" +
+	"        </TextObject>" +
+	"        <LineObject>" +
+	"          <Name>Line</Name>" +
+	"          <Brushes>" +
+	"            <BackgroundBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BackgroundBrush>" +
+	"            <BorderBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BorderBrush>" +
+	"            <StrokeBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </StrokeBrush>" +
+	"            <FillBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </FillBrush>" +
+	"          </Brushes>" +
+	"          <Rotation>Rotation0</Rotation>" +
+	"          <OutlineThickness>1</OutlineThickness>" +
+	"          <IsOutlined>False</IsOutlined>" +
+	"          <BorderStyle>SolidLine</BorderStyle>" +
+	"          <Margin>" +
+	"            <DYMOThickness Left=\"0\" Top=\"0\" Right=\"0\" Bottom=\"0\" />" +
+	"          </Margin>" +
+	"          <StrokeWidth>1</StrokeWidth>" +
+	"          <DashPattern>SolidLine</DashPattern>" +
+	"          <LineType>Horizontal</LineType>" +
+	"          <ObjectLayout>" +
+	"            <DYMOPoint>" +
+	"              <X>0.2333333</X>" +
+	"              <Y>0.8333333</Y>" +
+	"            </DYMOPoint>" +
+	"            <Size>" +
+	"              <Width>3.645833</Width>" +
+	"              <Height>0.125</Height>" +
+	"            </Size>" +
+	"          </ObjectLayout>" +
+	"        </LineObject>" +
+	"        <AddressObject>" +
+	"          <Name>Address</Name>" +
+	"          <Brushes>" +
+	"            <BackgroundBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BackgroundBrush>" +
+	"            <BorderBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </BorderBrush>" +
+	"            <StrokeBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </StrokeBrush>" +
+	"            <FillBrush>" +
+	"              <SolidColorBrush>" +
+	"                <Color A=\"0\" R=\"1\" G=\"1\" B=\"1\"> </Color>" +
+	"              </SolidColorBrush>" +
+	"            </FillBrush>" +
+	"          </Brushes>" +
+	"          <Rotation>Rotation0</Rotation>" +
+	"          <OutlineThickness>1</OutlineThickness>" +
+	"          <IsOutlined>False</IsOutlined>" +
+	"          <BorderStyle>SolidLine</BorderStyle>" +
+	"          <Margin>" +
+	"            <DYMOThickness Left=\"0\" Top=\"0\" Right=\"0\" Bottom=\"0\" />" +
+	"          </Margin>" +
+	"          <HorizontalAlignment>Center</HorizontalAlignment>" +
+	"          <VerticalAlignment>Middle</VerticalAlignment>" +
+	"          <FitMode>AlwaysFit</FitMode>" +
+	"          <IsVertical>False</IsVertical>" +
+	"          <FormattedText>" +
+	"            <FitMode>AlwaysFit</FitMode>" +
+	"            <HorizontalAlignment>Center</HorizontalAlignment>" +
+	"            <VerticalAlignment>Middle</VerticalAlignment>" +
+	"            <IsVertical>False</IsVertical>" +
+	"            <LineTextSpan>" +
+	"              <TextSpan>" +
+	"                <Text>Ticket #TICKET_NUMBER</Text>" +
+	"                <FontInfo>" +
+	"                  <FontName>Arial</FontName>" +
+	"                  <FontSize>35.3</FontSize>" +
+	"                  <IsBold>True</IsBold>" +
+	"                  <IsItalic>False</IsItalic>" +
+	"                  <IsUnderline>False</IsUnderline>" +
+	"                  <FontBrush>" +
+	"                    <SolidColorBrush>" +
+	"                      <Color A=\"1\" R=\"0\" G=\"0\" B=\"0\"> </Color>" +
+	"                    </SolidColorBrush>" +
+	"                  </FontBrush>" +
+	"                </FontInfo>" +
+	"              </TextSpan>" +
+	"            </LineTextSpan>" +
+	"          </FormattedText>" +
+	"          <BarcodePosition>None</BarcodePosition>" +
+	"          <ObjectLayout>" +
+	"            <DYMOPoint>" +
+	"              <X>0.2333333</X>" +
+	"              <Y>1.010417</Y>" +
+	"            </DYMOPoint>" +
+	"            <Size>" +
+	"              <Width>3.541667</Width>" +
+	"              <Height>1.186111</Height>" +
+	"            </Size>" +
+	"          </ObjectLayout>" +
+	"        </AddressObject>" +
+	"      </LabelObjects>" +
+	"    </DynamicLayoutManager>" +
+	"  </DYMOLabel>" +
+	"  <LabelApplication>Blank</LabelApplication>" +
+	"  <DataTable>" +
+	"    <Columns></Columns>" +
+	"    <Rows></Rows>" +
+	"  </DataTable>" +
+	"</DesktopLabel>";
+                
+        labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
+        var label = dymo.label.framework.openLabelXml(labelXml);
+                
+        var pngData = label.render();
+        var labelImage = document.getElementById('labelImage');
+        labelImage.src = "data:image/png;base64," + pngData;
                 
         // prints the label
         printButton.onclick = function()
         {
             try
             {
-                // open label
-                var labelXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-    "                    <DieCutLabel Version=\"8.0\" Units=\"twips\" MediaType=\"Default\">" +
-    "                    <PaperOrientation>Landscape</PaperOrientation>" +
-    "                    <Id>LargeShipping</Id>" +
-    "                    <IsOutlined>false</IsOutlined>" +
-    "                    <PaperName>30256 Shipping</PaperName>" +
-    "                    <DrawCommands>" +
-    "                        <RoundRectangle X=\"0\" Y=\"0\" Width=\"3331\" Height=\"5715\" Rx=\"270\" Ry=\"270\" />" +
-    "                    </DrawCommands>" +
-    "                    <ObjectInfo>" +
-    "                        <TextObject>" +
-    "                            <Name>Name</Name>" +
-    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
-    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
-    "                            <LinkedObjectName />" +
-    "                            <Rotation>Rotation0</Rotation>" +
-    "                            <IsMirrored>False</IsMirrored>" +
-    "                            <IsVariable>False</IsVariable>" +
-    "                            <GroupID>-1</GroupID>" +
-    "                            <IsOutlined>False</IsOutlined>" +
-    "                            <HorizontalAlignment>Center</HorizontalAlignment>" +
-    "                            <VerticalAlignment>Middle</VerticalAlignment>" +
-    "                            <TextFitMode>ShrinkToFit</TextFitMode>" +
-    "                            <UseFullFontHeight>True</UseFullFontHeight>" +
-    "                            <Verticalized>False</Verticalized>" +
-    "                            <StyledText>" +
-    "                                <Element>" +
-    "                                    <String xml:space=\"preserve\">COMPANY_NAME</String>" +
-    "                                    <Attributes>" +
-    "                                        <Font Family=\"Arial\" Size=\"24\" Bold=\"True\" Italic=\"False\" Underline=\"False\" Strikeout=\"False\" />" +
-    "                                        <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" HueScale=\"100\" />" +
-    "                                    </Attributes>" +
-    "                                </Element>" +
-    "                            </StyledText>" +
-    "                        </TextObject>" +
-    "                        <Bounds X=\"336\" Y=\"150\" Width=\"5040\" Height=\"1095\" />" +
-    "                    </ObjectInfo>" +
-    "                    <ObjectInfo>" +
-    "                        <ShapeObject Stroke=\"SolidLine\">" +
-    "                            <Name>Shape</Name>" +
-    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
-    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
-    "                            <LinkedObjectName />" +
-    "                            <Rotation>Rotation0</Rotation>" +
-    "                            <IsMirrored>False</IsMirrored>" +
-    "                            <IsVariable>False</IsVariable>" +
-    "                            <GroupID>-1</GroupID>" +
-    "                            <IsOutlined>False</IsOutlined>" +
-    "                            <ShapeType>HorizontalLine</ShapeType>" +
-    "                            <LineWidth>15</LineWidth>" +
-    "                            <LineAlignment>Center</LineAlignment>" +
-    "                            <FillColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
-    "                        </ShapeObject>" +
-    "                        <Bounds X=\"336\" Y=\"1395\" Width=\"5055\" Height=\"15\" />" +
-    "                    </ObjectInfo>" +
-    "                    <ObjectInfo>" +
-    "                        <TextObject>" +
-    "                            <Name>Text_1</Name>" +
-    "                            <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" />" +
-    "                            <BackColor Alpha=\"0\" Red=\"255\" Green=\"255\" Blue=\"255\" />" +
-    "                            <LinkedObjectName />" +
-    "                            <Rotation>Rotation0</Rotation>" +
-    "                            <IsMirrored>False</IsMirrored>" +
-    "                            <IsVariable>True</IsVariable>" +
-    "                            <GroupID>-1</GroupID>" +
-    "                            <IsOutlined>False</IsOutlined>" +
-    "                            <HorizontalAlignment>Center</HorizontalAlignment>" +
-    "                            <VerticalAlignment>Middle</VerticalAlignment>" +
-    "                            <TextFitMode>ShrinkToFit</TextFitMode>" +
-    "                            <UseFullFontHeight>True</UseFullFontHeight>" +
-    "                            <Verticalized>False</Verticalized>" +
-    "                            <StyledText>" +
-    "                                <Element>" +
-    "                                    <String xml:space=\"preserve\">TICKET_NUMBER</String>" +
-    "                                    <Attributes>" +
-    "                                        <Font Family=\"Arial\" Size=\"24\" Bold=\"True\" Italic=\"False\" Underline=\"False\" Strikeout=\"False\" />" +
-    "                                        <ForeColor Alpha=\"255\" Red=\"0\" Green=\"0\" Blue=\"0\" HueScale=\"100\" />" +
-    "                                    </Attributes>" +
-    "                                </Element>" +
-    "                            </StyledText>" +
-    "                        </TextObject>" +
-    "                        <Bounds X=\"336\" Y=\"1725\" Width=\"5070\" Height=\"1320\" />" +
-    "                    </ObjectInfo>" +
-    "                </DieCutLabel>";
                 
-                labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
-                
-                var label = dymo.label.framework.openLabelXml(labelXml);
                 
                 // select printer to print on
                 // for simplicity sake just use the first LabelWriter printer
@@ -171,9 +336,11 @@
 </head>
 <body>
 
-<p id="labeltext"></p>
+<p id="preview">
+<img id="labelImage" src="" alt="label preview" />
+</p>
 <br /><br />
 Click below to print label.
-<div id="printDiv"><button id="printButton">Print</button></div>
+<div id="printDiv"><button id="printButton" class="button">Print</button></div>
 </body>
 </html>
