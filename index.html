@@ -32,19 +32,15 @@ img {
 
 (function()
 {
-    // called when the document completly loaded
     function onload()
     {
-        var printButton = document.getElementById('printButton');
-        
+        //Get URL paramaters
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const company = urlParams.get("co");
         const ticket = urlParams.get("srid");
-        //console.log(company);
-        //console.log(ticket);
         
-        // open label
+        // define label XML
         var labelXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
 	"<DesktopLabel Version=\"1\">" +
 	"  <DYMOLabel Version=\"3\">" +
@@ -266,23 +262,32 @@ img {
 	"    <Rows></Rows>" +
 	"  </DataTable>" +
 	"</DesktopLabel>";
-                
+        
+		//Replace placeholders with content from parameters
         labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
-        var label = dymo.label.framework.openLabelXml(labelXml);
+		
+		//Create label object
+		var label = dymo.label.framework.openLabelXml(labelXml);
+        
+		//Render label preview
+		try {
+			var pngData = label.render();
+			var labelImage = document.getElementById('labelImage');
+			labelImage.src = "data:image/png;base64," + pngData;
+		} catch (ex) {
+			document.body.innerHTML = "DYMO Label Framework was unable to render label. Check to ensure the Dymo Web Service is installed and running."
+			return;
+		}
+
                 
-        var pngData = label.render();
-        var labelImage = document.getElementById('labelImage');
-        labelImage.src = "data:image/png;base64," + pngData;
-                
-        // prints the label
+        // Set button to print on click
+		var printButton = document.getElementById('printButton');
         printButton.onclick = function()
         {
             try
             {
-                
-                
-                // select printer to print on
-                // for simplicity sake just use the first LabelWriter printer
+                // Select printer
+                // For simplicity's sake we are using the first connected LabelWriter printer
                 var printers = dymo.label.framework.getPrinters();
                 if (printers.length == 0)
                     throw "No DYMO printers are installed. Install DYMO printers.";
@@ -291,7 +296,7 @@ img {
                 for (var i = 0; i < printers.length; ++i)
                 {
                     var printer = printers[i];
-                    if (printer.printerType == "LabelWriterPrinter")
+                    if (printer.printerType == "LabelWriterPrinter" && printer.isConnected)
                     {
                         printerName = printer.name;
                         break;
@@ -301,8 +306,10 @@ img {
                 if (printerName == "")
                     throw "No LabelWriter printers found. Install LabelWriter printer";
 
-                // finally print the label
-                label.print(printerName);
+                //print the label
+				var printNumber = Math.min(10, document.getElementById("printNumber").value);
+				var paramsXML = dymo.label.framework.createLabelWriterPrintParamsXml({ copies: printNumber });
+				dymo.label.framework.printLabel(printerName, paramsXML, label.getLabelXml())
             }
             catch(e)
             {
@@ -315,10 +322,10 @@ img {
 	{
 		if(dymo.label.framework.init)
 		{
-			//dymo.label.framework.trace = true;
 			dymo.label.framework.init(onload);
 		} else {
-			onload();
+			document.body.innerHTML = "DYMO Label Framework JS library not loaded."
+			return;
 		}
 	}
 
@@ -337,10 +344,14 @@ img {
 <body>
 
 <p id="preview">
-<img id="labelImage" src="" alt="label preview" />
+<img id="labelImage" src="" alt="Loading label preview..." />
 </p>
 <br />
 Click below to print label.
-<div id="printDiv"><button id="printButton" class="button">Print</button></div>
+<div id="printDiv">
+	<button id="printButton" class="button">Print</button>
+	<input type="number" id="printNumber" value="1" size="4" max="10" min="1"/>
+</div>
+
 </body>
 </html>
