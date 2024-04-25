@@ -269,7 +269,7 @@ img {
         if(mode == "main"){
             labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
         } else if(mode =="storefront") {
-            const enduser = summary.replace(".+- (.+)","$1")
+            const enduser = summary.replace(new RegExp(".+- (.+)"),"$1")
             labelXml = labelXml.replace("COMPANY_NAME", enduser).replace("TICKET_NUMBER", ticket);
         }
 		
