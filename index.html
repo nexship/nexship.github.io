@@ -37,8 +37,10 @@ img {
         //Get URL paramaters
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
+        const mode = urlParams.get("mode");
         const company = urlParams.get("co");
         const ticket = urlParams.get("srid");
+        const summary = urlParams.get("srsummary");
         
         // define label XML
         var labelXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
@@ -264,7 +266,12 @@ img {
 	"</DesktopLabel>";
         
 		//Replace placeholders with content from parameters
-        labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
+        if(mode == "main"){
+            labelXml = labelXml.replace("COMPANY_NAME", company).replace("TICKET_NUMBER", ticket);
+        } else if(mode =="storefront") {
+            const enduser = summary.replace(".+- (.+)","$1")
+            labelXml = labelXml.replace("COMPANY_NAME", enduser).replace("TICKET_NUMBER", ticket);
+        }
 		
 		//Create label object
 		var label = dymo.label.framework.openLabelXml(labelXml);
